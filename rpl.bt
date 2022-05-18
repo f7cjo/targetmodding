@@ -1,0 +1,34 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: *.rpl
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+#include "include.h"
+local u32 headerColor = SetRandomBackColor();
+
+struct
+{
+    struct Header{
+    SetBackColor( headerColor );
+    char Magic[4];
+    uint16 EntryCount;
+    uint16 NameTableLength<format=hex>;
+    }header<name="Header">;
+    local int fjo;
+    for(fjo=0;fjo<header.EntryCount;fjo++){
+    SetRandomBackColor();
+    struct File{
+    char Name[8];
+    uint16 FileLength<format=hex>;
+    uint16 FileEnd<format=hex>;
+    }file<name="File">;
+   };
+} RPL;
