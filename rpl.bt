@@ -2,9 +2,9 @@
 //--- 010 Editor v12.0.1 Binary Template
 //
 //      File: *.rpl
-//   Authors: 
+//   Authors: f7cjo
 //   Version: 
-//   Purpose: 
+//   Purpose: None
 //  Category: 
 // File Mask: 
 //  ID Bytes: 
@@ -12,23 +12,39 @@
 //------------------------------------------------
 
 #include "include.h"
-local u32 headerColor = SetRandomBackColor();
 
 struct
 {
     struct Header{
-    SetBackColor( headerColor );
+    SetRandomBackColor();
     char Magic[4];
-    uint16 EntryCount;
-    uint16 NameTableLength<format=hex>;
+    uint32 EntryCount;
+    uint32 NameTableLength<format=hex>;
     }header<name="Header">;
-    local int fjo;
-    for(fjo=0;fjo<header.EntryCount;fjo++){
+    local int violet;
+    for(violet=0; violet<header.EntryCount-1; violet++){
     SetRandomBackColor();
     struct File{
     char Name[8];
-    uint16 FileLength<format=hex>;
-    uint16 FileEnd<format=hex>;
+    uint32 FileLength<format=hex>;
+    uint32 FileEnd<format=hex>;
+    FPush();
+    {
+    FSeekRel( FileEnd - FileLength );
+    char Data[ FileLength ];
+    }
+    FPop();
     }file<name="File">;
-   };
+    };
+    SetRandomBackColor();
+    struct LastFile{
+    char Name[8];
+    uint32 FileLength<format=hex>;
+    FPush();
+    {
+    FSeekRel( FileSize() - FileLength );
+    char Data[ FileLength ];
+    }
+    FPop();
+    }lastfile<name="Last file">;
 } RPL;
